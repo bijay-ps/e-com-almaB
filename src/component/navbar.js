@@ -4,7 +4,6 @@ import { FaSignInAlt, FaUserPlus, FaShoppingCart } from "react-icons/fa";
 import image from "../assets/discord.png";
 
 const Navbar = () => {
-  // const state = useSelector((state) => state.handleCart);
   return (
     <div className="nav_bar">
       <nav className="navbar navbar-expand-lg navbar-light bg-white py-3 shadow-sm">
@@ -14,9 +13,9 @@ const Navbar = () => {
               <img src={image} alt="Almabetter" />
             </a>
           </div>
-          <a className="navbar-brand fw-bold fs-4" href="/">
+          <NavLink className="navbar-brand fw-bold fs-4" to="/">
             LA COLLECTION
-          </a>
+          </NavLink>
           <button
             className="navbar-toggler"
             type="button"
@@ -31,41 +30,40 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <a
+                <NavLink
                   className="nav-link fw-bold active"
                   aria-current="page"
-                  href="/"
+                  to="/"
                 >
                   Home
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link fw-bold" href="/products">
+                <NavLink className="nav-link fw-bold" to="/products">
                   Products
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link fw-bold" href="/about">
+                <NavLink className="nav-link fw-bold" to="/about">
                   About
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link fw-bold" href="/contact">
+                <NavLink className="nav-link fw-bold" to="/contact">
                   Contact
-                </a>
+                </NavLink>
               </li>
             </ul>
             <div className="buttons">
-              <a href="/login" className="btn btn-outline-dark">
+              <NavLink to="/login" className="btn btn-outline-dark">
                 <FaSignInAlt className="me-1" /> Login
-              </a>
-              <a href="/register" className="btn btn-outline-dark ms-2">
+              </NavLink>
+              <NavLink to="/register" className="btn btn-outline-dark ms-2">
                 <FaUserPlus className="me-1" /> Register
-              </a>
-              <a href="/cart" className="btn btn-outline-dark ms-2">
-                {/*TODO: Change the cart items count using Redux*/}
-                <FaShoppingCart className="me-1" /> Cart ({0})
-              </a>
+              </NavLink>
+              <NavLink to="/cart" className="btn btn-outline-dark ms-2">
+                <FaShoppingCart className="me-1" /> Cart (0)
+              </NavLink>
             </div>
           </div>
         </div>
