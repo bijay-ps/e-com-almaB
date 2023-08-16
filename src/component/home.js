@@ -1,5 +1,4 @@
 import React from "react";
-import Products from "./products";
 import img from '../assets/bg.jpg'
 
 const Home = () => {
@@ -21,7 +20,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <Products />
     </div>
   );
 };
