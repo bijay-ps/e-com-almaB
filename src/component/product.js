@@ -1,52 +1,106 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import { FaStar } from "react-icons/fa";
+
+const ErrorBoundary = ({ children }) => {
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    setHasError(false);
+  }, [children]);
+
+  if (hasError) {
+    return <div>Oops! Something went wrong.</div>;
+  }
+
+  return children;
+};
 
 const Product = () => {
-  const [price, setPrice] = useState(0);
-  const info = {
-    id: 3,
-    title: "Mens Cotton Jacket",
-    price: 55.99,
-    description:
-      "great outerwear jackets for Spring/Autumn/Winter, suitable for many occasions, such as working, hiking, camping, mountain/rock climbing, cycling, traveling or other outdoors. Good gift choice for you or your family member. A warm hearted love to Father, husband or son in this thanksgiving or Christmas Day.",
-    category: "men's clothing",
-    image: "https://fakestoreapi.com/img/71li-ujtlUL._AC_UX679_.jpg",
-    rating: {
-      rate: 4.7,
-      count: 500,
-    },
+  const { id } = useParams();
+  const [product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const addProduct = (product) => {
+    //TODO
   };
-  const handleClickAdd = () => {
-    setPrice((prevCount) => prevCount + 1);
-  };
-  const handleClickSub = () => {
-    setPrice((prevCount) => {
-      if (prevCount === 0) {
-        return 0;
+
+  useEffect(() => {
+    const getProduct = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+        setProduct(await response.json());
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
       }
-      return prevCount - 1;
-    });
+    };
+    getProduct();
+  }, []);
+
+  const Loading = () => {
+    return (
+      <>
+        <div className="col-md-6">
+          <Skeleton height={400} />
+        </div>
+        <div className="col-md-6" style={{ lineHeight: 2 }}>
+          <Skeleton height={50} width={300} />
+          <Skeleton height={75} />
+          <Skeleton height={25} width={150} />
+          <Skeleton height={50} />
+          <Skeleton height={150} />
+          <Skeleton height={50} width={100} />
+          <Skeleton height={50} width={100} style={{ marginLeft: 6 }} />
+        </div>
+      </>
+    );
+  };
+
+  const ShowProduct = () => {
+    return (
+      <>
+        <div className="col-md-6">
+          <img
+            src={product.image}
+            alt={product.title}
+            height="400px"
+            width="400px"
+          />
+        </div>
+        <div className="col-md-6">
+          <h4 className="text-uppercase text-black-50">{product.category}</h4>
+          <h1 className="display-5">{product.title}</h1>
+          <p className="lead fw-bolder">
+            Rating {product.rating && product.rating.rate}
+            <FaStar />
+          </p>
+          <h3 className="display-6 fw-bold my-4">$ {product.price}</h3>
+          <p className="lead">{product.description}</p>
+          <button
+            className="btn btn-outline-dark px-4 py-2"
+            onClick={() => addProduct(product)}
+          >
+            Add to Cart
+          </button>
+          <NavLink to="/cart" className="btn btn-dark ms-2 px-3 py-2">
+            Go to Cart
+          </NavLink>
+        </div>
+      </>
+    );
   };
 
   return (
     <div>
-      <div className="col-md-6">
-        <img src={info.image} alt={info.title} height="100px" width="100px" />
-      </div>
-      <div className="col-md-6">
-        <h4 className="text-uppercase text-black-50">{info.category}</h4>
-        <h1 className="display-5">{info.title}</h1>
-        <p className="lead fw-bolder">
-          Rating {info.rating && info.rating.rate}
-        </p>
-        <h3 className="display-6 fw-bold my-4">$ {info.price}</h3>
-        <p className="lead">{info.description}</p>
-        <div className="container d-flex justify-content-evenly p-2 ">
-          <button onClick={handleClickAdd}>+</button>
-          <div>
-            {price * info.price} ${" "}
-            {price === 0 ? true : <div>for {price} items</div>}
-          </div>
-          <button onClick={handleClickSub}>-</button>
+      <div className="container py-5">
+        <div className="row py-4">
+          <ErrorBoundary>
+            {loading ? <Loading /> : <ShowProduct />}
+          </ErrorBoundary>
         </div>
       </div>
     </div>
